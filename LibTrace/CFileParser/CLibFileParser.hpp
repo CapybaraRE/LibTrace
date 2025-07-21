@@ -78,7 +78,7 @@ public:
         nlohmann::json signaturesJson;
         
         CThreadPool pool(std::thread::hardware_concurrency());
-        std::vector<std::future<nlohmann::json>> results;
+        std::vector<std::future<nlohmann::json>> results = {};
 
         std::atomic_uint32_t totalFunctionsParsed = 0;
         while (reinterpret_cast<char*>(pCurrentMemberHeader) + ARCHIVE_MEMBER_HEADER_SIZE <= memEnd)
@@ -103,8 +103,7 @@ public:
                 break;
             }
 
-            const std::string_view headerNameView(pCurrentMemberHeader->Name, sizeof(pCurrentMemberHeader->Name));
-            if (headerNameView == IMAGE_ARCHIVE_LINKER_MEMBER || headerNameView == IMAGE_ARCHIVE_LONGNAMES_MEMBER)
+            if (const std::string_view headerNameView(pCurrentMemberHeader->Name, sizeof(pCurrentMemberHeader->Name)); headerNameView == IMAGE_ARCHIVE_LINKER_MEMBER || headerNameView == IMAGE_ARCHIVE_LONGNAMES_MEMBER)
             {
                 pCurrentMemberHeader = reinterpret_cast<ArchiveMemberHeader*>(pNextHeader);
                 
@@ -189,7 +188,10 @@ public:
                             symbolName = RemoveSpaces({reinterpret_cast<const char*>(pSymbol->N.ShortName), IMAGE_SIZEOF_SHORT_NAME});
                         }
 
-                        if (symbolName.empty()) continue;
+                        if (symbolName.empty())
+                        {
+                            continue;
+                        }
 
                         if (const auto pFuncCode = pMemberData + section.PointerToRawData + pSymbol->Value; pFuncCode + funcSize <= memEnd)
                         {
@@ -197,7 +199,14 @@ public:
 
                             CLogger::Log("Generating signature for -> {} <-. Size -> {} <-.\n", symbolName.c_str(), funcSize);
                             
-                            std::string pattern;
+                            std::string pattern = { "null pattern" };
+
+                            if (funcSize < MIN_FUNC_SIZE)
+                            {
+                                CLogger::Log("Skipping func -> {} <- because of small size.", symbolName.c_str());
+
+                                continue;
+                            }
                             
                             CDisassembler::GetSignature(pCode, funcSize, pattern, pFileHeader->Machine == IMAGE_FILE_MACHINE_AMD64);
                             ++totalFunctionsParsed;
@@ -214,10 +223,18 @@ public:
             pCurrentMemberHeader = reinterpret_cast<ArchiveMemberHeader*>(pNextHeader);
         }
         
+        if (results.data()->get().empty())
+        {
+            CLogger::Log("No functions was parsed.");
+
+            return;
+        }
+        
         for(auto& future : results)
         {
             signaturesJson.update(future.get());
         }
+        
         std::string out = (outputPath / "Signatures.json").generic_string();
         
         std::ofstream o(out);
@@ -284,4 +301,7 @@ private:
     
     static constexpr auto ARCHIVE_MEMBER_HEADER_SIZE = sizeof(ArchiveMemberHeader);
     static_assert(ARCHIVE_MEMBER_HEADER_SIZE == 60, "ArchiveMemberHeader size must be 60.");
+
+    //static constexpr auto MIN_FUNC_SIZE = 0x20;
+    static constexpr auto MIN_FUNC_SIZE = 0x14;
 };

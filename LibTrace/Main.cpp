@@ -1,5 +1,3 @@
-#include <thread>
-
 #include "CFileParser/CLibFileParser.hpp"
 
 // https://learn.microsoft.com/ru-ru/windows/win32/debug/pe-format#section-table-section-headers
@@ -18,8 +16,8 @@ int main(const int argc, char* argv[])
     CLogger::Log("New impl of IdenLib.\n");
     
 #ifdef _DEBUG
-    constexpr auto TEST_FILE = R"(D:\Rider_Projects\LibTrace\LibTrace\json.lib)";
-    //constexpr auto TEST_FILE = R"(D:\Rider_Projects\LibTrace\LibTrace\TestLibForIdenLib.lib)";
+    //constexpr auto TEST_FILE = R"(D:\Rider_Projects\LibTrace\LibTrace\json.lib)";
+    constexpr auto TEST_FILE = R"(D:\Rider_Projects\LibTrace\LibTrace\TestLibForIdenLib.lib)";
 
     constexpr auto TEST_OUT  = R"(D:\Rider_Projects\LibTrace\LibTrace)";
 
@@ -36,8 +34,8 @@ int main(const int argc, char* argv[])
         return 1;
     }
 
-    const std::string target = argv[1];
-    const std::string output = argv[2];
+    const std::filesystem::path target = argv[1];
+    const std::filesystem::path output = argv[2];
 #endif
     
     CLibFileParser::ParseFile(target, output);
