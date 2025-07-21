@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{D1EA2268-5260-44B9-8D72-8CC14564104B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>NewIdenLib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir);Libs;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)Libs\Zycore;(ProjectDir)Libs\Zydis;</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)Libs;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)Libs\Zycore;$(ProjectDir)Libs\Zydis;</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ZYDIS_STATIC_BUILD;</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);ZydisDebug.lib;ZycoreDebug.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libs\Zydis;$(ProjectDir)Libs\Zycore;</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);ZYDIS_STATIC_BUILD</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);ZydisRelease.lib;ZycoreRelease.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libs\Zydis;$(ProjectDir)Libs\Zycore;</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CDisassembler\CDisassembler.hpp" />
+    <ClInclude Include="CFileParser\CLibFileParser.hpp" />
+    <ClInclude Include="CLogger\CLogger.hpp" />
+    <ClInclude Include="CThreadPool\CThreadPool.hpp" />
+    <ClInclude Include="Libs\Json\Json.hpp" />
+    <ClInclude Include="Libs\Zycore\Allocator.h" />
+    <ClInclude Include="Libs\Zycore\API\Memory.h" />
+    <ClInclude Include="Libs\Zycore\API\Process.h" />
+    <ClInclude Include="Libs\Zycore\API\Synchronization.h" />
+    <ClInclude Include="Libs\Zycore\API\Terminal.h" />
+    <ClInclude Include="Libs\Zycore\API\Thread.h" />
+    <ClInclude Include="Libs\Zycore\ArgParse.h" />
+    <ClInclude Include="Libs\Zycore\Atomic.h" />
+    <ClInclude Include="Libs\Zycore\Bitset.h" />
+    <ClInclude Include="Libs\Zycore\Comparison.h" />
+    <ClInclude Include="Libs\Zycore\Defines.h" />
+    <ClInclude Include="Libs\Zycore\Format.h" />
+    <ClInclude Include="Libs\Zycore\Internal\AtomicGNU.h" />
+    <ClInclude Include="Libs\Zycore\Internal\AtomicMSVC.h" />
+    <ClInclude Include="Libs\Zycore\LibC.h" />
+    <ClInclude Include="Libs\Zycore\List.h" />
+    <ClInclude Include="Libs\Zycore\Object.h" />
+    <ClInclude Include="Libs\Zycore\Status.h" />
+    <ClInclude Include="Libs\Zycore\String.h" />
+    <ClInclude Include="Libs\Zycore\Types.h" />
+    <ClInclude Include="Libs\Zycore\Vector.h" />
+    <ClInclude Include="Libs\Zycore\Zycore.h" />
+    <ClInclude Include="Libs\Zydis\Decoder.h" />
+    <ClInclude Include="Libs\Zydis\DecoderTypes.h" />
+    <ClInclude Include="Libs\Zydis\Defines.h" />
+    <ClInclude Include="Libs\Zydis\Disassembler.h" />
+    <ClInclude Include="Libs\Zydis\Encoder.h" />
+    <ClInclude Include="Libs\Zydis\Formatter.h" />
+    <ClInclude Include="Libs\Zydis\FormatterBuffer.h" />
+    <ClInclude Include="Libs\Zydis\Generated\EnumInstructionCategory.h" />
+    <ClInclude Include="Libs\Zydis\Generated\EnumISAExt.h" />
+    <ClInclude Include="Libs\Zydis\Generated\EnumISASet.h" />
+    <ClInclude Include="Libs\Zydis\Generated\EnumMnemonic.h" />
+    <ClInclude Include="Libs\Zydis\Generated\EnumRegister.h" />
+    <ClInclude Include="Libs\Zydis\Internal\DecoderData.h" />
+    <ClInclude Include="Libs\Zydis\Internal\EncoderData.h" />
+    <ClInclude Include="Libs\Zydis\Internal\FormatterATT.h" />
+    <ClInclude Include="Libs\Zydis\Internal\FormatterBase.h" />
+    <ClInclude Include="Libs\Zydis\Internal\FormatterIntel.h" />
+    <ClInclude Include="Libs\Zydis\Internal\SharedData.h" />
+    <ClInclude Include="Libs\Zydis\Internal\String.h" />
+    <ClInclude Include="Libs\Zydis\MetaInfo.h" />
+    <ClInclude Include="Libs\Zydis\Mnemonic.h" />
+    <ClInclude Include="Libs\Zydis\Register.h" />
+    <ClInclude Include="Libs\Zydis\Segment.h" />
+    <ClInclude Include="Libs\Zydis\SharedTypes.h" />
+    <ClInclude Include="Libs\Zydis\ShortString.h" />
+    <ClInclude Include="Libs\Zydis\Status.h" />
+    <ClInclude Include="Libs\Zydis\Utils.h" />
+    <ClInclude Include="Libs\Zydis\Zydis.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libs\Zycore\Zycore.lib" />
+    <Content Include="Libs\Zydis\Zydis.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
