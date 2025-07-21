@@ -1,0 +1,10 @@
+.idea/
+*.exe
+*.pdb
+*.lib
+*.sln
+*.user
+*.vcxproj
+*.vcxproj.filters
+*.json
+*.py
