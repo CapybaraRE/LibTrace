@@ -222,17 +222,29 @@ public:
             
             pCurrentMemberHeader = reinterpret_cast<ArchiveMemberHeader*>(pNextHeader);
         }
-        
-        if (results.data()->get().empty())
+
+        CLogger::Log("TEST.");
+        if (!totalFunctionsParsed.load())
         {
             CLogger::Log("No functions was parsed.");
 
             return;
         }
         
-        for(auto& future : results)
+        for (auto& future : results)
         {
-            signaturesJson.update(future.get());
+            try
+            {
+                signaturesJson.update(future.get());
+            }
+            catch (const std::exception& e)
+            {
+                CLogger::Log("Worker thread threw exception: {}", e.what());
+            }
+            catch (...)
+            {
+                CLogger::Log("Unknown exception from worker thread.");
+            }
         }
         
         std::string out = (outputPath / "Signatures.json").generic_string();
